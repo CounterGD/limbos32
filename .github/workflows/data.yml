@@ -1,0 +1,37 @@
+name: Build Windows Executable [All Data]
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build with PyInstaller
+        run: |
+          # This command includes all png and mp3 files in the root
+          pyinstaller --onefile --name limbos32 \
+          --add-data "LIMBO.mp3;." \
+          --add-data "error.mp3;." \
+          --add-data "*.png;." \
+          main.py
+
+      - name: Upload Executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: limbos32-windows
+          path: dist/limbos32.exe
+          
