@@ -20,14 +20,12 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
-      - name: Build with PyInstaller
-        run: |
-          # This command includes all png and mp3 files in the root
-          pyinstaller --onefile --name limbos32 \
-          --add-data "LIMBO.mp3;." \
-          --add-data "error.mp3;." \
-          --add-data "*.png;." \
-          main.py
+      
+            - name: Build with PyInstaller
+              shell: pwsh
+              run: |
+                pyinstaller --onefile --name limbos32 --add-data "LIMBO.mp3;." --add-data "error.mp3;." --add-data "*.png;." main.py
+          
 
       - name: Upload Executable
         uses: actions/upload-artifact@v4
